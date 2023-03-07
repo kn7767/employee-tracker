@@ -1,7 +1,10 @@
+require('dotenv').config();
+
+const password = process.env.DB_PASSWORD;
+
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const table = require('console.table');
-require('dotenv').config();
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -56,7 +59,7 @@ const startPrompt = () => {
 }
 
 const viewAllDepartments = () => {
-    const query = `SELECT * FROM departments`;
+    const query = `SELECT * FROM department`;
     db.query(query,
         function(err, res) {
             if (err) throw err
@@ -76,7 +79,7 @@ const viewAllRoles = () => {
 };
 
 const viewAllEmployees = () => {
-    const query = `SELECT employees.id, employees.first_name, employees.last_name, departments.name, roles.title, roles.salary, CONCAT(e.first_name, ' ', e.last_name) AS MANAGER FROM employees INNER JOIN roles on roles.id = employees.role_id INNER JOIN departments on departments.id = roles.department_id left join employees on employees.manager_id = e.id;`;
+    const query = `SELECT employees.id, employees.first_name, employees.last_name, department.name, roles.title, roles.salary, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employees INNER JOIN roles on roles.id = employees.role_id INNER JOIN department on department.id = roles.department_id left join employees e on employees.manager_id = e.id;`;
     db.query(query,
         function(err, res) {
             if (err) throw err
@@ -88,10 +91,10 @@ const viewAllEmployees = () => {
 const addDepartment = () => {
     inquirer.prompt([{
         name: "Name",
-        type: "Input",
+        type: "input",
         message: "What department would you like to add?"
     }]).then(function(res) {
-        const query = "INSERT INTO departments SET ?";
+        const query = "INSERT INTO department SET ?";
         db.query(
             query, {
                 name: res.Name
@@ -170,7 +173,7 @@ const addEmployee = () => {
         messager: "Enter employee last name"
     },
     {
-        name: "role",
+        name: "roles",
         type: "list",
         message: "What is this employees role?",
         choice: selectRole()
@@ -213,7 +216,7 @@ const updateEmployee = () => {
             }, message: "What is the Employee's last name?",
         },
         {
-            name: "role",
+            name: "roles",
             type: "rawlist",
             message: "What is the Employees new title?",
             choices: selectRole()
