@@ -1,7 +1,6 @@
+
+// npm installs
 require('dotenv').config();
-
-const password = process.env.DB_PASSWORD;
-
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const table = require('console.table');
@@ -39,7 +38,6 @@ const startPrompt = () => {
                 console.log(val.action);
                 viewAllDepartments();
                 break;
-
             case "View all roles":
                 viewAllRoles();
                 break;
@@ -179,7 +177,7 @@ const addEmployee = () => {
         name: "roles",
         type: "list",
         message: "What is this employee's role?",
-        choice: selectRole()
+        choices: selectRole()
     },
     {
         name: "choice",
@@ -201,7 +199,7 @@ const addEmployee = () => {
         startPrompt()
     })
 })
-}
+};
 
 const updateEmployee = () => {
     const query = `SELECT employees.last_name, roles.title FROM employees JOIN roles ON employees.role_id = roles.id`;
