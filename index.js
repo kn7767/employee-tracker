@@ -27,7 +27,7 @@ const startPrompt = () => {
         choices: [
             "View all departments",
             "View all roles",
-            "View all employee",
+            "View all employees",
             "Add department",
             "Add role",
             "Add employee",
@@ -48,6 +48,9 @@ const startPrompt = () => {
                 break;
             case "Add department":
                 addDepartment();
+                break;
+            case "Add role":
+                addRole();
                 break;
             case "Add employee":
                 addEmployee();
@@ -165,17 +168,17 @@ const addEmployee = () => {
     inquirer.prompt([{
         name: "first_name",
         type: "input",
-        message: "Enter employee first name"
+        message: "Enter employee's first name"
     },
     {
         name: "last_name",
         type: "input",
-        messager: "Enter employee last name"
+        message: "Enter employee's last name"
     },
     {
         name: "roles",
         type: "list",
-        message: "What is this employees role?",
+        message: "What is this employee's role?",
         choice: selectRole()
     },
     {
@@ -201,7 +204,7 @@ const addEmployee = () => {
 }
 
 const updateEmployee = () => {
-    const query = `SELECT employees.last_name, roles.title FROM employees JOIN roles ON employes.role_id = roles.id`;
+    const query = `SELECT employees.last_name, roles.title FROM employees JOIN roles ON employees.role_id = roles.id`;
     db.query(query, function(err, res) {
         if (err) throw err
         inquirer.prompt([{
